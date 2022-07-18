@@ -1,0 +1,65 @@
+const path = require('path')
+const todoModel = require('../models/todoModel')
+
+exports.getAll = async (req, res, next) => {
+  let todo = await todoModel.findAll()
+  let undone = todo.filter(x=>!x.completed).length
+  res.render('index', {todo,undone} )
+}
+
+exports.getActive = async (req, res, next) => {
+  let todo = await todoModel.findAll()
+  todo = todo.filter(x=>!x.completed)
+  let undone = todo.filter(x=>!x.completed).length
+  res.render('index', {todo,undone} )
+}
+
+exports.getCompleted = async (req, res, next) => {
+  let todo = await todoModel.findAll()
+  todo = todo.filter(x=>x.completed)
+  let undone = todo.filter(x=>!x.completed).length
+  res.render('index', {todo,undone} )
+}
+
+
+exports.delete = async (req, res, next) => {
+  let {id} = req.body
+  let result = await todoModel.remove(id)
+  await exports.getAll(req, res, next)
+}
+
+exports.deleteAllCompleted = async (req,res,next) => {
+  let result = await todoModel.findAll()
+  for(let i=0;i<result.length;i++){
+    if(result[i].completed===true){
+      await todoModel.remove(result[i].id)
+    }
+  }
+  await exports.getAll(req, res, next)
+}
+
+exports.add = async (req,res,next) => {
+  let {list} = req.body
+  let result = await todoModel.add(list)
+  await exports.getAll(req, res, next)
+}
+
+exports.update = async (req,res,next) => {
+  let body = req.body
+  let saveItem = {...body,completed: body.completed? true: false}
+  let result = await todoModel.replace(saveItem)
+  console.log('resutl',result)
+  await exports.getAll(req, res, next)
+}
+
+exports.updateAllCompleted = async (req,res,next) => {
+  let result = await todoModel.findAll()
+  let noAllCompleted = result.some(x=>!x.completed)
+  if(noAllCompleted){
+    todoModel.replaceAllCompleted(true)
+  }else{
+    todoModel.replaceAllCompleted(false)
+  }
+  await exports.getAll(req, res, next)
+}
+
