@@ -12,27 +12,27 @@
 			
 			<header class="header">
 				<h1>todos</h1>
-				<form class="new-todo-wrap"  action="/add" method="POST" target="iframe" onsubmit="setTimeout(function(){window.location.reload();},10);">
+				<form class="new-todo-wrap"  action="/add" method="POST">
 					<input class="new-todo" name="list" placeholder="What needs to be done?">
 				</form>
 			</header>
 
 			<section class="main">
 				<form class="toggle-all-wrap" action="/updateAllCompleted" method="POST">
-					<input id="toggle-all" class="toggle-all" type="checkbox" onchange="submit()" onclick="setTimeout(function(){window.location.reload();},10);" >
+					<input id="toggle-all" class="toggle-all" type="checkbox" onchange="submit()" >
 					<label for="toggle-all">Mark all as complete</label>
 				</form>
 				<ul class="todo-list">
 					<% todo.forEach(x => { %>
 					<li class=<%= x.completed? 'completed':'' %> >
 						<div class="view">
-							<form class="toggle-wrap" action="/update" method="POST" target="iframe">
+							<form class="toggle-wrap" action="/update" method="POST" >
 								<input type="hidden" name="id" value=<%= x.id %> />
-								<input class="toggle" type="checkbox" name="completed" value="true" onchange="submit()" onclick="setTimeout(function(){window.location.reload();},10);" <%= x.completed? 'checked':'' %>  />
+								<input class="toggle" type="checkbox" name="completed" value="true" onchange="submit()"  <%= x.completed? 'checked':'' %>  />
 								<input class="label" type="text" ondblclick="exit(this)" onblur="submit()" name="list" value=<%= x.list %>  readonly />
 							</form>
 				
-							<form class="toggle-wrap" action="/delete" method="POST" target="iframe" onsubmit="setTimeout(function(){window.location.reload();},10);">
+							<form class="toggle-wrap" action="/delete" method="POST" target="iframe" >
 								<input type="hidden" name="id" value=<%= x.id %>  readonly >
 								<button class="destroy" type="submit"></button>
 							</form>
@@ -57,7 +57,7 @@
 					</li>
 				</ul>
 				<!-- Hidden if no completed items are left ↓ -->
-				<Form action="/deleteAllCompleted" method="POST" target="iframe" onsubmit="setTimeout(function(){window.location.reload();},10);">
+				<Form action="/deleteAllCompleted" method="POST" >
 					<button class="clear-completed">Clear completed</button>
 				</Form>
 			</footer>

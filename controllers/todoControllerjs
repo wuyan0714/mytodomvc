@@ -25,7 +25,7 @@ exports.getCompleted = async (req, res, next) => {
 exports.delete = async (req, res, next) => {
   let {id} = req.body
   let result = await todoModel.remove(id)
-  await exports.getAll(req, res, next)
+  res.redirect('back'); 
 }
 
 exports.deleteAllCompleted = async (req,res,next) => {
@@ -35,21 +35,20 @@ exports.deleteAllCompleted = async (req,res,next) => {
       await todoModel.remove(result[i].id)
     }
   }
-  await exports.getAll(req, res, next)
+  res.redirect('back'); 
 }
 
 exports.add = async (req,res,next) => {
   let {list} = req.body
   let result = await todoModel.add(list)
-  await exports.getAll(req, res, next)
+  res.redirect('back'); 
 }
 
 exports.update = async (req,res,next) => {
   let body = req.body
   let saveItem = {...body,completed: body.completed? true: false}
   let result = await todoModel.replace(saveItem)
-  console.log('resutl',result)
-  await exports.getAll(req, res, next)
+  res.redirect('back'); 
 }
 
 exports.updateAllCompleted = async (req,res,next) => {
@@ -60,6 +59,6 @@ exports.updateAllCompleted = async (req,res,next) => {
   }else{
     todoModel.replaceAllCompleted(false)
   }
-  await exports.getAll(req, res, next)
+  res.redirect('back'); 
 }
 

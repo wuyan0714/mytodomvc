@@ -17,4 +17,4 @@ app.use((err, req, res, next) => {
   res.json({ msg: "Something Wrong", err });
 });
 
-app.listen(8080, () => console.log("Server run on 8080..."));
+app.listen(8080, () => console.log("Server run on http://localhost:8080/"));
