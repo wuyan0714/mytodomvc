@@ -1,0 +1,78 @@
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>TodoMVC</title>
+		<link rel="stylesheet" href="todomvc-common/base.css">
+		<link rel="stylesheet" href="todomvc-app-css/index.css">
+	</head>
+	<body>
+		<iframe id="iframe" name="iframe" style="display:none;"></iframe>
+		<section class="todoapp">
+			
+			<header class="header">
+				<h1>todos</h1>
+				<form class="new-todo-wrap"  action="/add" method="POST" target="iframe" onsubmit="setTimeout(function(){window.location.reload();},10);">
+					<input class="new-todo" name="list" placeholder="What needs to be done?">
+				</form>
+			</header>
+
+			<section class="main">
+				<form class="toggle-all-wrap" action="/updateAllCompleted" method="POST">
+					<input id="toggle-all" class="toggle-all" type="checkbox" onchange="submit()" onclick="setTimeout(function(){window.location.reload();},10);" >
+					<label for="toggle-all">Mark all as complete</label>
+				</form>
+				<ul class="todo-list">
+					<% todo.forEach(x => { %>
+					<li class=<%= x.completed? 'completed':'' %> >
+						<div class="view">
+							<form class="toggle-wrap" action="/update" method="POST" target="iframe">
+								<input type="hidden" name="id" value=<%= x.id %> />
+								<input class="toggle" type="checkbox" name="completed" value="true" onchange="submit()" onclick="setTimeout(function(){window.location.reload();},10);" <%= x.completed? 'checked':'' %>  />
+								<input class="label" type="text" ondblclick="exit(this)" onblur="submit()" name="list" value=<%= x.list %>  readonly />
+							</form>
+				
+							<form class="toggle-wrap" action="/delete" method="POST" target="iframe" onsubmit="setTimeout(function(){window.location.reload();},10);">
+								<input type="hidden" name="id" value=<%= x.id %>  readonly >
+								<button class="destroy" type="submit"></button>
+							</form>
+						</div>
+						<input class="edit" value="Create a TodoMVC">
+					</li>
+					<% }) %>
+				</ul>
+			</section>
+
+			<footer class="footer">
+				<span class="todo-count"><strong><%= undone %></strong> item left</span>
+				<ul class="filters">
+					<li>
+						<a  href="/all">All</a>
+					</li>
+					<li>
+						<a  href="/active">Active</a>
+					</li>
+					<li>
+						<a  href="/completed">Completed</a>
+					</li>
+				</ul>
+				<!-- Hidden if no completed items are left ↓ -->
+				<Form action="/deleteAllCompleted" method="POST" target="iframe" onsubmit="setTimeout(function(){window.location.reload();},10);">
+					<button class="clear-completed">Clear completed</button>
+				</Form>
+			</footer>
+
+		</section>
+
+		<footer class="info">
+			<p>Double-click to edit a todo</p>
+			<p>Created by WuyanCheng</p>
+			<p>Part of TodoMVC</p>
+		</footer>
+		<script>
+			function exit(elem) {
+				elem.readOnly = false;
+			}
+		</script>
+	</body>
+</html>
