@@ -4,23 +4,31 @@ const todoModel = require('../models/todoModel')
 exports.getAll = async (req, res, next) => {
   let todo = await todoModel.findAll()
   let undone = todo.filter(x=>!x.completed).length
-  res.render('index', {todo,undone} )
+  let done = todo.filter(x=>x.completed).length
+  let dataType = 'all'
+  let haveCompleted = done>0
+  res.render('index', {todo,undone,dataType,haveCompleted} )
 }
 
 exports.getActive = async (req, res, next) => {
   let todo = await todoModel.findAll()
-  todo = todo.filter(x=>!x.completed)
   let undone = todo.filter(x=>!x.completed).length
-  res.render('index', {todo,undone} )
+  let done = todo.filter(x=>x.completed).length
+  todo = todo.filter(x=>!x.completed)
+  let dataType = 'active'
+  let haveCompleted = done>0
+  res.render('index', {todo,undone,dataType,haveCompleted} )
 }
 
 exports.getCompleted = async (req, res, next) => {
   let todo = await todoModel.findAll()
-  todo = todo.filter(x=>x.completed)
   let undone = todo.filter(x=>!x.completed).length
-  res.render('index', {todo,undone} )
+  let done = todo.filter(x=>x.completed).length
+  todo = todo.filter(x=>x.completed)
+  let dataType = 'completed'
+  let haveCompleted = done>0
+  res.render('index', {todo,undone,dataType,haveCompleted} )
 }
-
 
 exports.delete = async (req, res, next) => {
   let {id} = req.body
@@ -40,14 +48,23 @@ exports.deleteAllCompleted = async (req,res,next) => {
 
 exports.add = async (req,res,next) => {
   let {list} = req.body
+  list = list.trim()
+  if(list.length===0){
+    return
+  }
   let result = await todoModel.add(list)
   res.redirect('back'); 
 }
 
 exports.update = async (req,res,next) => {
   let body = req.body
-  let saveItem = {...body,completed: body.completed? true: false}
-  let result = await todoModel.replace(saveItem)
+  if(("list" in body)&&(body.list.trim().length===0)){
+    let {id} = req.body
+    await todoModel.remove(id)
+  }else{
+    let saveItem = {...body,completed: body.completed? true: false}
+    await todoModel.replace(saveItem)
+  }
   res.redirect('back'); 
 }
 

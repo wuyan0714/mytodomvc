@@ -26,13 +26,13 @@
 					<li class=<%= x.completed? 'completed':'' %> >
 						<div class="view">
 							<form class="toggle-wrap" action="/update" method="POST" >
-								<input type="hidden" name="id" value=<%= x.id %> />
-								<input class="toggle" type="checkbox" name="completed" value="true" onchange="submit()"  <%= x.completed? 'checked':'' %>  />
-								<input class="label" type="text" ondblclick="exit(this)" onblur="submit()" name="list" value=<%= x.list %>  readonly />
+								<input type="hidden" name="id" value=<%= x.id %> >
+								<input class="toggle" type="checkbox" name="completed" value="true" onchange="submit()"  <%= x.completed? 'checked':'' %>  >
+								<input class="label" type="text" ondblclick="exit(this)" onblur="submit()" name="list" readonly value=<%= x.list %>  >
 							</form>
 				
 							<form class="toggle-wrap" action="/delete" method="POST" target="iframe" >
-								<input type="hidden" name="id" value=<%= x.id %>  readonly >
+								<input type="hidden" name="id" readonly value=<%= x.id %>  >
 								<button class="destroy" type="submit"></button>
 							</form>
 						</div>
@@ -46,18 +46,18 @@
 				<span class="todo-count"><strong><%= undone %></strong> item left</span>
 				<ul class="filters">
 					<li>
-						<a  href="/all">All</a>
+						<a  href="/all"  class=<%= dataType==='all'? 'selected':'' %>>All</a>
 					</li>
 					<li>
-						<a  href="/active">Active</a>
+						<a  href="/active" class=<%= dataType==='active'? 'selected':'' %>>Active</a>
 					</li>
 					<li>
-						<a  href="/completed">Completed</a>
+						<a  href="/completed" class=<%= dataType==='completed'? 'selected':'' %>>Completed</a>
 					</li>
 				</ul>
 				<!-- Hidden if no completed items are left ↓ -->
 				<Form action="/deleteAllCompleted" method="POST" >
-					<button class="clear-completed">Clear completed</button>
+					<button class="clear-completed" style=<%= haveCompleted? 'display:none':'' %>"display:none">Clear completed</button>
 				</Form>
 			</footer>
 
