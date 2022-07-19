@@ -2,37 +2,37 @@ const path = require('path')
 const todoModel = require('../models/todoModel')
 
 exports.getAll = async (req, res, next) => {
-  let todo = await todoModel.findAll()
-  let undone = todo.filter(x=>!x.completed).length
-  let done = todo.filter(x=>x.completed).length
+  let curTodoList = await todoModel.findAll()
+  let unCompletedNum = curTodoList.filter(x=>!x.completed).length
+  let completedNum = curTodoList.filter(x=>x.completed).length
   let dataType = 'all'
-  let haveCompleted = done>0
-  res.render('index', {todo,undone,dataType,haveCompleted} )
+  let haveCompleted = completedNum>0
+  res.render('index', {curTodoList,unCompletedNum,dataType,haveCompleted} )
 }
 
 exports.getActive = async (req, res, next) => {
-  let todo = await todoModel.findAll()
-  let undone = todo.filter(x=>!x.completed).length
-  let done = todo.filter(x=>x.completed).length
-  todo = todo.filter(x=>!x.completed)
+  let curTodoList = await todoModel.findAll()
+  let unCompletedNum = curTodoList.filter(x=>!x.completed).length
+  let completedNum = curTodoList.filter(x=>x.completed).length
+  curTodoList = curTodoList.filter(x=>!x.completed)
   let dataType = 'active'
-  let haveCompleted = done>0
-  res.render('index', {todo,undone,dataType,haveCompleted} )
+  let haveCompleted = completedNum>0
+  res.render('index', {curTodoList,unCompletedNum,dataType,haveCompleted} )
 }
 
 exports.getCompleted = async (req, res, next) => {
-  let todo = await todoModel.findAll()
-  let undone = todo.filter(x=>!x.completed).length
-  let done = todo.filter(x=>x.completed).length
-  todo = todo.filter(x=>x.completed)
+  let curTodoList = await todoModel.findAll()
+  let unCompletedNum = curTodoList.filter(x=>!x.completed).length
+  let completedNum = curTodoList.filter(x=>x.completed).length
+  curTodoList = curTodoList.filter(x=>x.completed)
   let dataType = 'completed'
-  let haveCompleted = done>0
-  res.render('index', {todo,undone,dataType,haveCompleted} )
+  let haveCompleted = completedNum>0
+  res.render('index', {curTodoList,unCompletedNum,dataType,haveCompleted} )
 }
 
 exports.delete = async (req, res, next) => {
   let {id} = req.body
-  let result = await todoModel.remove(id)
+  await todoModel.remove(id)
   res.redirect('back'); 
 }
 
@@ -47,18 +47,18 @@ exports.deleteAllCompleted = async (req,res,next) => {
 }
 
 exports.add = async (req,res,next) => {
-  let {list} = req.body
-  list = list.trim()
-  if(list.length===0){
+  let {content} = req.body
+  content = content.trim()
+  if(content.length===0){
     return
   }
-  let result = await todoModel.add(list)
+  await todoModel.add(content)
   res.redirect('back'); 
 }
 
 exports.update = async (req,res,next) => {
   let body = req.body
-  if(("list" in body)&&(body.list.trim().length===0)){
+  if(("content" in body)&&(body.content.trim().length===0)){
     let {id} = req.body
     await todoModel.remove(id)
   }else{

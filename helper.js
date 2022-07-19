@@ -7,6 +7,3 @@ exports.readFileJSON = async fileName => (
 exports.writeFileJSON = async (fileName, data) =>( 
   await fs.writeFile(fileName, JSON.stringify(data))
 )
-
-// module.exports = {readFileJSON, writeFileJSON}
-

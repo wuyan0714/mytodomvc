@@ -5,8 +5,8 @@ const {readFileJSON, writeFileJSON} = require("../helper")
 const dbs = 'dbs/todo.json'
 
 class todoModel {
-  constructor(list, completed) {
-    this.list = list
+  constructor(content, completed) {
+    this.content = content
     this.completed= completed
   }
 
@@ -14,12 +14,7 @@ class todoModel {
     let data = await readFileJSON(dbs)
     return data
   }
-
-  static findOne = async (id) => {
-    let data = await readFileJSON(dbs)
-    return data.find(x => x.id === id)
-  }
-
+  
   static remove = async (id) => {
     let data = await readFileJSON(dbs)
     let del_id = data.findIndex(x=> x.id === id)
@@ -28,9 +23,9 @@ class todoModel {
     return delItem
   }
 
-  static add = async (list) => {
+  static add = async (content) => {
     let data = await readFileJSON(dbs)
-    let newTodo = {id: uuid(), list, completed: false}
+    let newTodo = {id: uuid(), content, completed: false}
     data.unshift(newTodo)
     await writeFileJSON(dbs, data)
     return newTodo

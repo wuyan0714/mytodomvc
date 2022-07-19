@@ -12,7 +12,7 @@
 			<header class="header">
 				<h1>todos</h1>
 				<form class="new-todo-wrap"  action="/add" method="POST">
-					<input class="new-todo" name="list" placeholder="What needs to be done?">
+					<input class="new-todo" name="content" placeholder="What needs to be done?">
 				</form>
 			</header>
 
@@ -22,28 +22,26 @@
 					<label for="toggle-all">Mark all as complete</label>
 				</form>
 				<ul class="todo-list">
-					<% todo.forEach(x => { %>
+					<% curTodoList.forEach(x => { %>
 					<li class=<%= x.completed? 'completed':'' %> >
 						<div class="view">
 							<form class="toggle-wrap" action="/update" method="POST" >
 								<input type="hidden" name="id" value=<%= x.id %> >
 								<input class="toggle" type="checkbox" name="completed" value="true" onchange="submit()"  <%= x.completed? 'checked':'' %>  >
-								<input class="label" type="text" ondblclick="exit(this)" onblur="submit()" name="list" readonly value=<%= x.list %>  >
+								<input class="label" type="text" name="content" ondblclick="onExit(this)" onblur="submit()" readonly value=<%= x.content %>  >
 							</form>
-				
 							<form class="toggle-wrap" action="/delete" method="POST" target="iframe" >
-								<input type="hidden" name="id" readonly value=<%= x.id %>  >
+								<input type="hidden" name="id" value=<%= x.id %>  >
 								<button class="destroy" type="submit"></button>
 							</form>
 						</div>
-						<input class="edit" value="Create a TodoMVC">
 					</li>
 					<% }) %>
 				</ul>
 			</section>
 
 			<footer class="footer">
-				<span class="todo-count"><strong><%= undone %></strong> item left</span>
+				<span class="todo-count"><strong><%= unCompletedNum %></strong> item left</span>
 				<ul class="filters">
 					<li>
 						<a  href="/all"  class=<%= dataType==='all'? 'selected':'' %>>All</a>
@@ -55,7 +53,6 @@
 						<a  href="/completed" class=<%= dataType==='completed'? 'selected':'' %>>Completed</a>
 					</li>
 				</ul>
-				<!-- Hidden if no completed items are left ↓ -->
 				<Form action="/deleteAllCompleted" method="POST" >
 					<button class="clear-completed" style=<%= haveCompleted? 'display:none':'' %>"display:none">Clear completed</button>
 				</Form>
@@ -69,7 +66,7 @@
 			<p>Part of TodoMVC</p>
 		</footer>
 		<script>
-			function exit(elem) {
+			function onExit(elem) {
 				elem.readOnly = false;
 			}
 		</script>
